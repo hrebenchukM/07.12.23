@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+
+    <script>
+      
+        /*let currentDate = new Date(); // текущие дата и время
+        document.write(currentDate + "<br />");
+        let myDate = new Date("1 September 2020");
+        document.write(myDate + "<br />");
+        myDate = new Date("9/1/2020 12:20");
+        document.write(myDate + "<br />");
+        myDate = new Date(2020, 8, 1, 12, 20);
+        document.write(myDate + "<br />");
+
+        let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+        let months = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"];
+
+        myDate = new Date();
+        let h = myDate.getHours();
+        let welcome = "";
+        if (h >= 0 && h < 5)
+            welcome = "Доброй ночи!";
+        else if (h >= 5 && h < 12)
+            welcome = "Доброе утро!";
+        else if (h >= 12 && h < 17)
+            welcome = "Добрый день!";
+        else
+            welcome = "Добрый вечер!";
+        if (h < 10)
+            h = "0" + h;
+        let m = myDate.getMinutes();
+        if (m < 10)
+            m = "0" + m;
+        let s = myDate.getSeconds();
+        if (s < 10)
+            s = "0" + s;
+        let fullDate = days[myDate.getDay()] + ", " +myDate.getDate() + " " + months[myDate.getMonth()] +
+                        " " + myDate.getFullYear() + "  " + h + ":" + m + ":" + s;
+        document.write("<h3>" + welcome + "</h3>");
+        document.write(fullDate);
+
+        myDate = new Date();
+        myDate.setDate(12);
+        myDate.setMonth(8);
+        myDate.setYear(2020);
+
+        fullDate = myDate.getDate() + " " + months[myDate.getMonth()] +
+                        " " + myDate.getFullYear() + ", " + days[myDate.getDay()];
+        document.write("<br /><h3>День программиста</h3>" + fullDate);*/
+ 
+ /*Задание 1
+ Реализовать класс ExtendedDate, унаследовав его от стандартного
+класса Date и добавив следующие возможности:
+ метод для вывода даты (числа и месяца) текстом;
+ метод для проверки – это прошедшая дата или будущая (если
+прошедшая, то метод возвращает false; если будущая или текущая, то
+true);
+ метод для проверки – високосный год или нет;
+ метод, возвращающий следующую дату.
+Создать объект класса ExtendedDate и вывести на экран результаты
+работы новых методов.Использовать DOM для вывода информации*/
+class ExtendedDate extends Date {
+        constructor(year, month, day) {
+            super(year, month, day);
+        }
+
+        DateText() {
+            let days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+            let months = ["Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля", "Августа", "Сентября", "Октября", "Ноября", "Декабря"];
+
+            let dayOfWeek = days[this.getDay()];
+            let dayOfMonth = this.getDate();
+            let month = months[this.getMonth()];
+            let year = this.getFullYear();
+
+            return `${dayOfWeek}, ${dayOfMonth} ${month} ${year}`;
+        }
+
+        isFutureDate() {
+            let currentDate = new Date();
+
+            if (this.getFullYear() > currentDate.getFullYear()) {
+                return true;
+            } else if (this.getFullYear() === currentDate.getFullYear()) {
+                if (this.getMonth() > currentDate.getMonth()) {
+                    return true;
+                } else if (this.getMonth() === currentDate.getMonth()) {
+                    if (this.getDate() >= currentDate.getDate()) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        isLeapYear() {
+            let currentYear = this.getFullYear();
+
+            return (currentYear % 4 === 0 && currentYear % 100 !== 0) || (currentYear % 400 === 0);
+        }
+
+        getNextDate() {
+            let currentDay = this.getDate();
+            let currentMonth = this.getMonth();
+            let currentYear = this.getFullYear();
+
+            let nextDay = currentDay + 1;
+            let nextDate = new ExtendedDate(currentYear, currentMonth, nextDay);
+
+            return nextDate;
+        }
+    }
+
+   
+    let year = prompt("Введите год:");
+    let month = prompt("Введите месяц (1-12):");
+    let day = prompt("Введите день:");
+
+    let extendedDate = new ExtendedDate(year, month - 1, day); // Месяцы в JavaScript начинаются с 0
+
+
+    let printDate = extendedDate.DateText();
+    document.write(`<h3>${printDate}</h3>`);
+
+    let isFuture = extendedDate.isFutureDate();
+    document.write(`<p>Это ${isFuture ? 'будущая или текущая' : 'прошедшая'} дата.</p>`);
+
+    let isLeapYear = extendedDate.isLeapYear();
+    document.write(`<p>${isLeapYear ? 'Год високосный.' : 'Год не високосный.'}</p>`);
+
+    let nextDate = extendedDate.getNextDate();
+    let formattedNextDate = nextDate.DateText();
+    document.write(`<p>Следующая дата: ${formattedNextDate}</p>`);
+
+
+
+    /*Задание 2
+    Использовать DOM для вывода информации
+Реализовать класс, описывающий простой маркер. В классе должны
+быть следующие компоненты:
+ поле, которое хранит цвет маркера;
+ поле, которое хранит количество чернил в маркере (в процентах);
+ метод для печати (метод принимает строку и выводит текст
+соответствующим цветом; текст выводится до тех пор, пока в маркере
+есть чернила; один не пробельный символ – это 0,5% чернил в маркере).
+Реализовать класс, описывающий заправляющийся маркер,
+унаследовав его от простого маркера и добавив метод для заправки маркера.
+Продемонстрировать работу написанных методов.*/
+
+class Marker 
+{
+    color;
+    countInk;
+    constructor(color, countInk) {
+           this.color=color;
+           this.countInk=countInk;
+        }
+        print(userString) {
+        for (let i = 0; i < userString.length; i++) {
+            if (this.countInk > 0) {
+                if (userString[i] !== ' ') {
+                    this.countInk -= 0.5;
+                }
+               document.write(`${userString[i]}</br>`);
+            } else {
+                document.write('No ink left!', 'color: red</br>');
+                break;
+            }
+        }
+    }
+        
+}
+
+class MagicMarker extends Marker {
+    constructor(color, countInk, capacity) {
+        super(color, countInk);
+        this.capacity = capacity;
+    }
+
+    refill() {
+        this.countInk = this.capacity;
+        document.write(`Marker refilled! Current ink level: ${this.countInk}%`, `color: ${this.color}</br>`);
+    }
+}
+
+let marker = new MagicMarker('blue', 50, 100);
+let text = document.querySelector("p");
+marker.print('Hello, World!');
+marker.refill();
+marker.print(text);
+    </script>
+</body>
+</html>
